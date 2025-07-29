@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Abastecimento ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+            --bg-light: #f4f6f8;
+            --text-dark: #333;
+            --sidebar-bg: #1e2a38;
+            --sidebar-text: #fff;
+            --sidebar-hover: #00c896;
+            --header-bg: #fff;
+            --border-color: #ddd;
+            --notification-bg: #333;
+            --notification-text: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Login Page Styles */
+        #login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            flex-direction: column;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 30px;
+            color: var(--dark-color);
+            font-size: 28px;
+        }
+
+        .login-container .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .login-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .login-container input[type="text"]:focus,
+        .login-container input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .login-error {
+            color: var(--danger-color);
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+            /* Hidden by default */
+        }
+
+        /* Layout for authenticated user */
+        #app-layout {
+            display: none;
+            /* Hidden by default, shown after login */
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: row;
+            /* Ensure sidebar and main content are side-by-side */
+        }
+
+        /* Sidebar */
+        aside {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            padding: 30px 20px;
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        aside h2 {
+            font-size: 22px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--sidebar-hover);
+            font-weight: 700;
+        }
+
+        aside ul {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        aside ul li {
+            margin-bottom: 18px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        aside ul li i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        aside ul li:hover,
+        aside ul li.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--sidebar-hover);
+        }
+
+        .user-info {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .user-info strong {
+            display: block;
+            font-size: 16px;
+            margin-top: 5px;
+            color: var(--sidebar-hover);
+        }
+
+        .logout-button {
+            background-color: var(--danger-color);
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            display: block;
+            margin-top: auto;
+            /* Push to the bottom */
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--header-bg);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            min-height: 70px;
+        }
+
+        header h1 {
+            font-size: 26px;
+            color: var(--dark-color);
+            margin: 0;
+            font-weight: 700;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            padding: 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .secao {
+            background-color: var(--header-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            display: none;
+            /* Hidden by default */
+        }
+
+        .secao h2 {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Controls: Filters and Search */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-group label {
+            margin-right: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .filter-group select,
+        .search-bar input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 15px;
+            background-color: #fff;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar i {
+            margin-right: 8px;
+            color: var(--secondary-color);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+
+        th {
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fbfbfc;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 8px;
+            /* Spacing between buttons */
+        }
+
+        .btn:last-child {
+            margin-right: 0;
+        }
+
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .btn-remove {
+            background-color: var(--danger-color);
+            color: #fff;
+        }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .btn-status {
+            background-color: var(--success-color);
+            color: #fff;
+        }
+
+        .btn-status:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background-color: var(--info-color);
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            background-color: #138496;
+            transform: translateY(-1px);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .status-abastecido {
+            background-color: var(--success-color);
+            color: #fff;
+        }
+
+        .status-pendente {
+            background-color: var(--warning-color);
+            color: var(--dark-color);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            animation: fadeIn 0.3s ease-out;
+            position: relative;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .modal h3 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .modal label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 15px;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="number"],
+        .modal input[type="password"],
+        .modal select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* NEW: Styles for the checkbox group for profiles */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fcfcfc;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: normal;
+            /* Override modal label default */
+            cursor: pointer;
+        }
+
+        .checkbox-group label:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            /* Allow checkbox to be its natural size */
+            margin-right: 10px;
+            margin-bottom: 0;
+            /* Remove bottom margin */
+        }
+
+        /* END NEW */
+
+
+        .modal input[type="text"]:focus,
+        .modal input[type="number"]:focus,
+        .modal input[type="password"]:focus,
+        .modal select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Notifications */
+        #notification-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .notification {
+            background-color: var(--notification-bg);
+            color: var(--notification-text);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: slideIn 0.3s forwards;
+            min-width: 250px;
+        }
+
+        .notification.hide {
+            animation: slideOut 0.3s forwards;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                padding: 15px;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            aside h2,
+            .user-info {
+                display: none;
+            }
+
+            aside ul {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                justify-content: center;
+            }
+
+            aside ul li {
+                padding: 8px 12px;
+                margin-bottom: 0;
+                font-size: 14px;
+            }
+
+            aside ul li i {
+                margin-right: 5px;
+            }
+
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                text-align: center;
+                gap: 10px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .content-wrapper {
+                padding: 20px;
+            }
+
+            .secao {
+                padding: 15px;
+            }
+
+            .secao h2 {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group,
+            .search-bar {
+                width: 100%;
+            }
+
+            table,
+            th,
+            td {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                display: block;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            }
+
+            td {
+                text-align: right;
+                position: relative;
+                padding-left: 50%;
+                border: none;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                text-align: left;
+                font-weight: 600;
+                color: var(--primary-color);
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .logo-container {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.logo-container img {
+    max-width: 200px;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+    </style>
+</head>
+
+<body>
+  <div id="login-page">
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Midea.svg/1200px-Midea.svg.png" alt="Logo Midea">
+    </div>
+    <div class="login-container">
+        <h2>Bem-vindo ao Sistema ERP</h2>
+        <form id="login-form">
+            <div class="input-group">
+                <label for="username">Usuário:</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Entrar</button>
+            <p id="login-error" class="login-error">Credenciais inválidas. Tente novamente.</p>
+        </form>
+    </div>
+</div>
+
+
+    <div id="app-layout">
+        <aside>
+            <h2>Sistema ERP</h2>
+            <ul id="main-menu">
+            </ul>
+            <div class="user-info">
+                Usuário: <strong id="userAtual"></strong>
+            </div>
+            <button class="logout-button" onclick="logout()">Sair</button>
+        </aside>
+
+        <div class="main-content">
+            <header>
+                <h1>Painel de Abastecimento</h1>
+                <div class="header-user-info">Usuário: <strong id="userAtualHeader"></strong></div>
+            </header>
+
+            <div class="content-wrapper">
+                <div id="fabrica" class="secao">
+                    <h2>Solicitações da Fábrica</h2>
+                    <div class="controls">
+                        <button class="btn btn-primary" onclick="abrirModalSolicitacao()"><i
+                                class="fas fa-plus-circle"></i> Nova Solicitação</button>
+                        <div>
+                            <button class="btn btn-info" onclick="exportarCSV('fabrica')"><i
+                                        class="fas fa-download"></i> Exportar CSV</button>
+                            <label for="importCsvFabrica" class="btn btn-success"><i class="fas fa-upload"></i> Importar CSV
+                                <input type="file" id="importCsvFabrica" accept=".csv"
+                                    onchange="importarCSV(event, 'fabrica')" style="display: none;"></label>
+                        </div>
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInputFabrica" placeholder="Buscar..."
+                                onkeyup="filtrarTabela('fabrica')">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nº OP</th>
+                                <th>Código Produto</th>
+                                <th>Linha</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaFabrica"></tbody>
+                    </table>
+                </div>
+
+                <div id="logistica" class="secao">
+                    <h2>Controle de Logística</h2>
+                    <div class="controls">
+                        <div class="filter-group">
+                            <label for="filterStatusLogistica">Status:</label>
+                            <select id="filterStatusLogistica" onchange="filtrarTabela('logistica')">
+                                <option value="">Todos</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Abastecido">Abastecido</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterPriorityLogistica">Prioridade:</label>
+                            <select id="filterPriorityLogistica" onchange="filtrarTabela('logistica')">
+                                <option value="">Todas</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Média">Média</option>
+                                <option value="Baixa">Baixa</option>
+                            </select>
+                        </div>
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInputLogistica" placeholder="Buscar..."
+                                onkeyup="filtrarTabela('logistica')">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nº OP</th>
+                                <th>Código Produto</th>
+                                <th>Linha</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Responsável</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaLogistica"></tbody>
+                    </table>
+                </div>
+
+                <div id="admin" class="secao">
+                    <h2>Visão do Administrador</h2>
+                    <div class="controls">
+                        <div>
+                            <button class="btn btn-info" onclick="exportarCSV('admin')"><i
+                                        class="fas fa-download"></i> Exportar CSV</button>
+                            <label for="importCsvAdmin" class="btn btn-success"><i class="fas fa-upload"></i> Importar CSV
+                                <input type="file" id="importCsvAdmin" accept=".csv"
+                                    onchange="importarCSV(event, 'admin')" style="display: none;"></label>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterStatusAdmin">Status:</label>
+                            <select id="filterStatusAdmin" onchange="filtrarTabela('admin')">
+                                <option value="">Todos</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Abastecido">Abastecido</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterPriorityAdmin">Prioridade:</label>
+                            <select id="filterPriorityAdmin" onchange="filtrarTabela('admin')">
+                                <option value="">Todas</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Média">Média</option>
+                                <option value="Baixa">Baixa</option>
+                            </select>
+                        </div>
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInputAdmin" placeholder="Buscar..."
+                                onkeyup="filtrarTabela('admin')">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nº OP</th>
+                                <th>Produto</th>
+                                <th>Linha</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Responsável</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaAdmin"></tbody>
+                    </table>
+                </div>
+
+                <div id="logsAbastecimento" class="secao">
+                    <h2>Logs de Abastecimento</h2>
+                    <div class="controls">
+                        <div class="filter-group">
+                            <label for="filterUserLogs">Usuário:</label>
+                            <select id="filterUserLogs" onchange="filtrarTabelaLogs()">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchLogsInput" placeholder="Buscar nos logs..."
+                                onkeyup="filtrarTabelaLogs()">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Solicitação</th>
+                                <th>Nº OP</th>
+                                <th>Produto</th>
+                                <th>Linha</th>
+                                <th>Usuário Responsável</th>
+                                <th>Data Abastecimento</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaLogsAbastecimento">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="gerenciarUsuarios" class="secao">
+                    <h2>Gerenciar Usuários</h2>
+                    <div class="controls">
+                        <button class="btn btn-primary" onclick="abrirModalUsuario()"><i class="fas fa-user-plus"></i> Novo Usuário</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Perfil(s)</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaUsuariosBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="solicitacaoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="fecharModalSolicitacao()">&times;</span>
+            <h3 id="modalTitle">Nova Solicitação</h3>
+            <form id="solicitacaoForm">
+                <input type="hidden" id="solicitacaoId">
+                <label for="op">Nº OP:</label>
+                <input type="text" id="op" required>
+
+                <label for="produto">Código do Produto:</label>
+                <input type="text" id="produto" required>
+
+                <label for="linha">Linha de Produção:</label>
+                <input type="text" id="linha" required>
+
+                <label for="prioridade">Prioridade:</label>
+                <select id="prioridade" required>
+                    <option value="">Selecione</option>
+                    <option value="Baixa">Baixa</option>
+                    <option value="Média">Média</option>
+                    <option value="Alta">Alta</option>
+                </select>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalSolicitacao()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="usuarioModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="fecharModalUsuario()">&times;</span>
+            <h3 id="usuarioModalTitle">Novo Usuário</h3>
+            <form id="usuarioForm">
+                <input type="hidden" id="usuarioId">
+                <label for="novoUsername">Usuário:</label>
+                <input type="text" id="novoUsername" required>
+
+                <label for="novaSenha">Senha:</label>
+                <input type="password" id="novaSenha" required>
+
+                <label>Perfis:</label>
+                <div class="checkbox-group" id="novoPerfilCheckboxes">
+                    <label><input type="checkbox" value="fabrica"> Fábrica</label>
+                    <label><input type="checkbox" value="logistica"> Logística</label>
+                    <label><input type="checkbox" value="admin"> Administrador</label>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalUsuario()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script>
+        // ** Dados persistentes (salvos e carregados do localStorage) **
+
+        let dynamicUsers = JSON.parse(localStorage.getItem('erpUsers')) || {
+            'admin': { password: 'admin', profiles: ['fabrica', 'logistica', 'admin'] },
+            'fabrica': { password: 'fabrica', profiles: ['fabrica'] },
+            'logistica': { password: 'logistica', profiles: ['logistica'] }
+        };
+
+        let requests = JSON.parse(localStorage.getItem('erpRequests')) || [];
+        let logs = JSON.parse(localStorage.getItem('erpLogs')) || [];
+        let currentUserId = null;
+        let currentUserProfiles = [];
+
+        // --- Funções de Persistência de Dados ---
+        function saveUsers() {
+            localStorage.setItem('erpUsers', JSON.stringify(dynamicUsers));
+        }
+
+        function saveRequests() {
+            localStorage.setItem('erpRequests', JSON.stringify(requests));
+        }
+
+        function saveLogs() {
+            localStorage.setItem('erpLogs', JSON.stringify(logs));
+        }
+
+        // --- Funções de Notificação ---
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.classList.add('notification', `notification-${type}`);
+            notification.textContent = message;
+            container.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('hide');
+                notification.addEventListener('animationend', () => {
+                    notification.remove();
+                });
+            }, 3000);
+        }
+
+        // --- Funções de Login e Logout ---
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            const loginError = document.getElementById('login-error');
+
+            if (dynamicUsers[usernameInput] && dynamicUsers[usernameInput].password === passwordInput) {
+                currentUserId = usernameInput;
+                currentUserProfiles = dynamicUsers[usernameInput].profiles;
+                loginError.style.display = 'none';
+                showApp();
+                showNotification(`Bem-vindo, ${currentUserId}!`, 'success');
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+
+        function logout() {
+            currentUserId = null;
+            currentUserProfiles = [];
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('app-layout').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            showNotification('Você foi desconectado.', 'info');
+        }
+
+        // --- Funções de Navegação e Exibição de Conteúdo ---
+        function showApp() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('app-layout').style.display = 'flex';
+            document.getElementById('userAtual').textContent = currentUserId;
+            document.getElementById('userAtualHeader').textContent = currentUserId;
+            renderMenu();
+            renderTables(); // Render all tables on login
+            // Automatically show the first allowed section for the user
+            if (currentUserProfiles.includes('fabrica')) {
+                showSection('fabrica');
+            } else if (currentUserProfiles.includes('logistica')) {
+                showSection('logistica');
+            } else if (currentUserProfiles.includes('admin')) {
+                showSection('admin');
+            } else if (currentUserProfiles.includes('logsAbastecimento')) {
+                showSection('logsAbastecimento');
+            }
+        }
+
+        function renderMenu() {
+            const menu = document.getElementById('main-menu');
+            menu.innerHTML = ''; // Clear existing menu items
+
+            const menuItems = [
+                { id: 'fabrica', label: 'Fábrica', icon: 'fas fa-industry', roles: ['fabrica', 'admin'] },
+                { id: 'logistica', label: 'Logística', icon: 'fas fa-truck', roles: ['logistica', 'admin'] },
+                { id: 'admin', label: 'Administrador', icon: 'fas fa-user-shield', roles: ['admin'] },
+                { id: 'logsAbastecimento', label: 'Logs de Abastecimento', icon: 'fas fa-clipboard-list', roles: ['logistica', 'admin'] },
+                { id: 'gerenciarUsuarios', label: 'Gerenciar Usuários', icon: 'fas fa-users-cog', roles: ['admin'] }
+            ];
+
+            menuItems.forEach(item => {
+                if (item.roles.some(role => currentUserProfiles.includes(role))) {
+                    const li = document.createElement('li');
+                    li.setAttribute('data-section', item.id);
+                    li.innerHTML = `<i class="${item.icon}"></i> ${item.label}`;
+                    li.onclick = () => showSection(item.id);
+                    menu.appendChild(li);
+                }
+            });
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.secao').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('#main-menu li').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.getElementById(sectionId).style.display = 'block';
+            document.querySelector(`#main-menu li[data-section="${sectionId}"]`).classList.add('active');
+            document.querySelector('header h1').textContent = document.querySelector(`#main-menu li[data-section="${sectionId}"]`).textContent.trim();
+
+            // Re-render relevant tables when a section is shown
+            if (sectionId === 'fabrica') {
+                renderFabricaTable();
+            } else if (sectionId === 'logistica') {
+                renderLogisticaTable();
+            } else if (sectionId === 'admin') {
+                renderAdminTable();
+            } else if (sectionId === 'logsAbastecimento') {
+                renderLogsTable();
+            } else if (sectionId === 'gerenciarUsuarios') {
+                renderUsuariosTable();
+            }
+            clearFiltersAndSearch(sectionId);
+        }
+
+        function clearFiltersAndSearch(sectionId) {
+            const searchInput = document.getElementById(`searchInput${capitalizeFirstLetter(sectionId)}`);
+            if (searchInput) searchInput.value = '';
+
+            const filterStatus = document.getElementById(`filterStatus${capitalizeFirstLetter(sectionId)}`);
+            if (filterStatus) filterStatus.value = '';
+
+            const filterPriority = document.getElementById(`filterPriority${capitalizeFirstLetter(sectionId)}`);
+            if (filterPriority) filterPriority.value = '';
+
+            // Specific for logs
+            if (sectionId === 'logsAbastecimento') {
+                const filterUserLogs = document.getElementById('filterUserLogs');
+                if (filterUserLogs) filterUserLogs.value = '';
+                const searchLogsInput = document.getElementById('searchLogsInput');
+                if (searchLogsInput) searchLogsInput.value = '';
+            }
+            filtrarTabela(sectionId); // Apply cleared filters
+            filtrarTabelaLogs(); // Apply cleared filters for logs
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // --- Gerenciamento de Solicitações (Factory, Logistics, Admin) ---
+        let currentRequestId = null; // Used for editing existing requests
+
+        function renderFabricaTable() {
+            const tbody = document.getElementById('tabelaFabrica');
+            tbody.innerHTML = '';
+            requests.filter(req => req.status === 'Pendente').forEach(req => {
+                const row = tbody.insertRow();
+                row.setAttribute('data-id', req.id);
+                row.innerHTML = `
+                    <td data-label="Nº OP">${req.op}</td>
+                    <td data-label="Código Produto">${req.produto}</td>
+                    <td data-label="Linha">${req.linha}</td>
+                    <td data-label="Prioridade">${req.prioridade}</td>
+                    <td data-label="Status"><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
+                    <td data-label="Ações">
+                        ${currentUserProfiles.includes('fabrica') || currentUserProfiles.includes('admin') ?
+                        `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
+                         <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>` : ''}
+                    </td>
+                `;
+            });
+        }
+
+        function renderLogisticaTable() {
+            const tbody = document.getElementById('tabelaLogistica');
+            tbody.innerHTML = '';
+            requests.forEach(req => {
+                const row = tbody.insertRow();
+                row.setAttribute('data-id', req.id);
+                row.innerHTML = `
+                    <td data-label="Nº OP">${req.op}</td>
+                    <td data-label="Código Produto">${req.produto}</td>
+                    <td data-label="Linha">${req.linha}</td>
+                    <td data-label="Prioridade">${req.prioridade}</td>
+                    <td data-label="Status"><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
+                    <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
+                    <td data-label="Ações">
+                        ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
+                        `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                    </td>
+                `;
+            });
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('tabelaAdmin');
+            tbody.innerHTML = '';
+            requests.forEach(req => {
+                const row = tbody.insertRow();
+                row.setAttribute('data-id', req.id);
+                row.innerHTML = `
+                    <td data-label="Nº OP">${req.op}</td>
+                    <td data-label="Produto">${req.produto}</td>
+                    <td data-label="Linha">${req.linha}</td>
+                    <td data-label="Prioridade">${req.prioridade}</td>
+                    <td data-label="Status"><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
+                    <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
+                    <td data-label="Ações">
+                        ${currentUserProfiles.includes('admin') ?
+                        `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
+                         <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>
+                         <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                    </td>
+                `;
+            });
+        }
+
+        function renderTables() {
+            renderFabricaTable();
+            renderLogisticaTable();
+            renderAdminTable();
+            renderLogsTable();
+            renderUsuariosTable();
+        }
+
+
+        // Modals para Solicitações
+        const solicitacaoModal = document.getElementById('solicitacaoModal');
+        const solicitacaoForm = document.getElementById('solicitacaoForm');
+        const modalTitle = document.getElementById('modalTitle');
+        const solicitacaoId = document.getElementById('solicitacaoId');
+        const opInput = document.getElementById('op');
+        const produtoInput = document.getElementById('produto');
+        const linhaInput = document.getElementById('linha');
+        const prioridadeSelect = document.getElementById('prioridade');
+
+        function abrirModalSolicitacao(id = null) {
+            solicitacaoModal.style.display = 'flex';
+            if (id) {
+                modalTitle.textContent = 'Editar Solicitação';
+                const request = requests.find(req => req.id === id);
+                if (request) {
+                    solicitacaoId.value = request.id;
+                    opInput.value = request.op;
+                    produtoInput.value = request.produto;
+                    linhaInput.value = request.linha;
+                    prioridadeSelect.value = request.prioridade;
+                }
+                currentRequestId = id;
+            } else {
+                modalTitle.textContent = 'Nova Solicitação';
+                solicitacaoForm.reset();
+                solicitacaoId.value = '';
+                currentRequestId = null;
+            }
+        }
+
+        function fecharModalSolicitacao() {
+            solicitacaoModal.style.display = 'none';
+        }
+
+        solicitacaoForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const id = solicitacaoId.value;
+            const op = opInput.value;
+            const produto = produtoInput.value;
+            const linha = linhaInput.value;
+            const prioridade = prioridadeSelect.value;
+
+            if (id) {
+                // Editar solicitação existente
+                const index = requests.findIndex(req => req.id === id);
+                if (index !== -1) {
+                    requests[index] = { ...requests[index], op, produto, linha, prioridade };
+                    showNotification('Solicitação atualizada com sucesso!', 'info');
+                }
+            } else {
+                // Nova solicitação
+                const newId = Date.now().toString(); // Simple unique ID
+                requests.push({ id: newId, op, produto, linha, prioridade, status: 'Pendente', responsavel: null });
+                showNotification('Nova solicitação criada!', 'success');
+            }
+            saveRequests();
+            renderFabricaTable();
+            renderAdminTable(); // Admin view also needs update
+            fecharModalSolicitacao();
+        });
+
+        function editarSolicitacao(id) {
+            abrirModalSolicitacao(id);
+        }
+
+        function removerSolicitacao(id) {
+            if (confirm('Tem certeza que deseja remover esta solicitação?')) {
+                requests = requests.filter(req => req.id !== id);
+                saveRequests();
+                renderFabricaTable();
+                renderLogisticaTable();
+                renderAdminTable();
+                showNotification('Solicitação removida.', 'danger');
+            }
+        }
+
+        function mudarStatusSolicitacao(id, currentStatus) {
+            const requestIndex = requests.findIndex(req => req.id === id);
+            if (requestIndex !== -1) {
+                if (currentStatus === 'Pendente') {
+                    requests[requestIndex].status = 'Abastecido';
+                    requests[requestIndex].responsavel = currentUserId;
+                    logs.push({
+                        id: Date.now().toString(),
+                        solicitacaoId: id,
+                        op: requests[requestIndex].op,
+                        produto: requests[requestIndex].produto,
+                        linha: requests[requestIndex].linha,
+                        usuarioResponsavel: currentUserId,
+                        dataAbastecimento: new Date().toLocaleString()
+                    });
+                    showNotification('Solicitação marcada como Abastecida.', 'success');
+                } else {
+                    requests[requestIndex].status = 'Pendente';
+                    requests[requestIndex].responsavel = null;
+                    // Optionally remove from logs or mark as reverted in logs
+                    // For simplicity, we just change status here. A real ERP would have more complex log management.
+                    showNotification('Status da solicitação revertido para Pendente.', 'warning');
+                }
+                saveRequests();
+                saveLogs();
+                renderLogisticaTable();
+                renderAdminTable();
+                renderLogsTable();
+            }
+        }
+
+        // --- Gerenciamento de Usuários (Admin) ---
+        const usuarioModal = document.getElementById('usuarioModal');
+        const usuarioForm = document.getElementById('usuarioForm');
+        const usuarioModalTitle = document.getElementById('usuarioModalTitle');
+        const usuarioIdInput = document.getElementById('usuarioId');
+        const novoUsernameInput = document.getElementById('novoUsername');
+        const novaSenhaInput = document.getElementById('novaSenha');
+        const novoPerfilCheckboxes = document.getElementById('novoPerfilCheckboxes');
+
+        function renderUsuariosTable() {
+            const tbody = document.getElementById('tabelaUsuariosBody');
+            tbody.innerHTML = '';
+            for (const username in dynamicUsers) {
+                const user = dynamicUsers[username];
+                const row = tbody.insertRow();
+                row.setAttribute('data-username', username);
+                row.innerHTML = `
+                    <td data-label="Usuário">${username}</td>
+                    <td data-label="Perfil(s)">${user.profiles.map(p => capitalizeFirstLetter(p)).join(', ')}</td>
+                    <td data-label="Ações">
+                        <button class="btn btn-edit" onclick="editarUsuario('${username}')"><i class="fas fa-edit"></i> Editar</button>
+                        ${username !== 'admin' ? `<button class="btn btn-remove" onclick="removerUsuario('${username}')"><i class="fas fa-trash"></i> Remover</button>` : ''}
+                    </td>
+                `;
+            }
+        }
+
+        function abrirModalUsuario(username = null) {
+            usuarioModal.style.display = 'flex';
+            if (username) {
+                usuarioModalTitle.textContent = 'Editar Usuário';
+                const user = dynamicUsers[username];
+                if (user) {
+                    usuarioIdInput.value = username;
+                    novoUsernameInput.value = username;
+                    novoUsernameInput.readOnly = true; // Prevent changing username for existing user
+                    novaSenhaInput.value = user.password; // Populate password for editing
+                    novaSenhaInput.required = false; // Password not required on edit if not changed
+
+                    novoPerfilCheckboxes.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = user.profiles.includes(checkbox.value);
+                    });
+                }
+            } else {
+                usuarioModalTitle.textContent = 'Novo Usuário';
+                usuarioForm.reset();
+                usuarioIdInput.value = '';
+                novoUsernameInput.readOnly = false;
+                novaSenhaInput.required = true;
+                novoPerfilCheckboxes.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            }
+        }
+
+        function fecharModalUsuario() {
+            usuarioModal.style.display = 'none';
+        }
+
+        usuarioForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const originalUsername = usuarioIdInput.value;
+            const newUsername = novoUsernameInput.value;
+            const newPassword = novaSenhaInput.value;
+            const selectedProfiles = Array.from(novoPerfilCheckboxes.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+
+            if (originalUsername) {
+                // Edit existing user
+                if (newUsername !== originalUsername && dynamicUsers[newUsername]) {
+                    showNotification('Nome de usuário já existe!', 'danger');
+                    return;
+                }
+                const userToUpdate = dynamicUsers[originalUsername];
+                if (newPassword) { // Update password only if provided
+                    userToUpdate.password = newPassword;
+                }
+                userToUpdate.profiles = selectedProfiles;
+
+                // If username changed (though readOnly is set, for completeness)
+                if (newUsername !== originalUsername) {
+                    dynamicUsers[newUsername] = dynamicUsers[originalUsername];
+                    delete dynamicUsers[originalUsername];
+                }
+                showNotification('Usuário atualizado com sucesso!', 'info');
+            } else {
+                // New user
+                if (dynamicUsers[newUsername]) {
+                    showNotification('Nome de usuário já existe!', 'danger');
+                    return;
+                }
+                dynamicUsers[newUsername] = { password: newPassword, profiles: selectedProfiles };
+                showNotification('Novo usuário criado!', 'success');
+            }
+            saveUsers();
+            renderUsuariosTable();
+            renderLogsTable(); // Update user filter in logs
+            renderMenu(); // Update sidebar menu in case permissions changed
+            fecharModalUsuario();
+        });
+
+        function editarUsuario(username) {
+            abrirModalUsuario(username);
+        }
+
+        function removerUsuario(username) {
+            if (username === 'admin') {
+                showNotification('Não é possível remover o usuário administrador padrão.', 'danger');
+                return;
+            }
+            if (confirm(`Tem certeza que deseja remover o usuário ${username}?`)) {
+                delete dynamicUsers[username];
+                saveUsers();
+                renderUsuariosTable();
+                renderLogsTable(); // Update user filter in logs
+                renderMenu(); // Update sidebar menu in case permissions changed
+                showNotification(`Usuário ${username} removido.`, 'danger');
+            }
+        }
+
+        // --- Logs de Abastecimento ---
+        function renderLogsTable() {
+            const tbody = document.getElementById('tabelaLogsAbastecimento');
+            tbody.innerHTML = '';
+
+            const filterUser = document.getElementById('filterUserLogs').value;
+            const searchTerm = document.getElementById('searchLogsInput').value.toLowerCase();
+
+            // Populate user filter dropdown
+            const userFilterSelect = document.getElementById('filterUserLogs');
+            userFilterSelect.innerHTML = '<option value="">Todos</option>';
+            const uniqueUsersInLogs = [...new Set(logs.map(log => log.usuarioResponsavel))];
+            uniqueUsersInLogs.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user;
+                option.textContent = user;
+                userFilterSelect.appendChild(option);
+            });
+            userFilterSelect.value = filterUser; // Keep current selection
+
+            logs.filter(log => {
+                const matchesUser = filterUser ? log.usuarioResponsavel === filterUser : true;
+                const matchesSearch = searchTerm ?
+                    log.op.toLowerCase().includes(searchTerm) ||
+                    log.produto.toLowerCase().includes(searchTerm) ||
+                    log.linha.toLowerCase().includes(searchTerm) ||
+                    log.usuarioResponsavel.toLowerCase().includes(searchTerm) ||
+                    log.dataAbastecimento.toLowerCase().includes(searchTerm)
+                    : true;
+                return matchesUser && matchesSearch;
+            }).forEach(log => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td data-label="ID Solicitação">${log.solicitacaoId}</td>
+                    <td data-label="Nº OP">${log.op}</td>
+                    <td data-label="Produto">${log.produto}</td>
+                    <td data-label="Linha">${log.linha}</td>
+                    <td data-label="Usuário Responsável">${log.usuarioResponsavel}</td>
+                    <td data-label="Data Abastecimento">${log.dataAbastecimento}</td>
+                `;
+            });
+        }
+
+        function filtrarTabelaLogs() {
+            renderLogsTable();
+        }
+
+        // --- Funções de Filtragem e Busca (para Fábrica, Logística, Admin) ---
+        function filtrarTabela(section) {
+            let filteredRequests = [...requests];
+            const searchInput = document.getElementById(`searchInput${capitalizeFirstLetter(section)}`);
+            const filterStatus = document.getElementById(`filterStatus${capitalizeFirstLetter(section)}`);
+            const filterPriority = document.getElementById(`filterPriority${capitalizeFirstLetter(section)}`);
+
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            const statusFilter = filterStatus ? filterStatus.value : '';
+            const priorityFilter = filterPriority ? filterPriority.value : '';
+
+            if (section === 'fabrica') {
+                filteredRequests = filteredRequests.filter(req => req.status === 'Pendente');
+            }
+
+            filteredRequests = filteredRequests.filter(req => {
+                const matchesSearch = (req.op.toLowerCase().includes(searchTerm) ||
+                    req.produto.toLowerCase().includes(searchTerm) ||
+                    req.linha.toLowerCase().includes(searchTerm) ||
+                    req.prioridade.toLowerCase().includes(searchTerm) ||
+                    req.status.toLowerCase().includes(searchTerm) ||
+                    (req.responsavel && req.responsavel.toLowerCase().includes(searchTerm)));
+
+                const matchesStatus = statusFilter ? req.status === statusFilter : true;
+                const matchesPriority = priorityFilter ? req.prioridade === priorityFilter : true;
+
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+
+            const tbody = document.getElementById(`tabela${capitalizeFirstLetter(section)}`);
+            tbody.innerHTML = '';
+
+            filteredRequests.forEach(req => {
+                const row = tbody.insertRow();
+                row.setAttribute('data-id', req.id);
+                if (section === 'fabrica') {
+                    row.innerHTML = `
+                        <td data-label="Nº OP">${req.op}</td>
+                        <td data-label="Código Produto">${req.produto}</td>
+                        <td data-label="Linha">${req.linha}</td>
+                        <td data-label="Prioridade">${req.prioridade}</td>
+                        <td data-label="Status"><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
+                        <td data-label="Ações">
+                            ${currentUserProfiles.includes('fabrica') || currentUserProfiles.includes('admin') ?
+                            `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
+                             <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>` : ''}
+                        </td>
+                    `;
+                } else if (section === 'logistica') {
+                    row.innerHTML = `
+                        <td data-label="Nº OP">${req.op}</td>
+                        <td data-label="Código Produto">${req.produto}</td>
+                        <td data-label="Linha">${req.linha}</td>
+                        <td data-label="Prioridade">${req.prioridade}</td>
+                        <td data-label="Status"><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
+                        <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
+                        <td data-label="Ações">
+                            ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
+                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                        </td>
+                    `;
+                } else if (section === 'admin') {
+                    row.innerHTML = `
+                        <td data-label="Nº OP">${req.op}</td>
+                        <td data-label="Produto">${req.produto}</td>
+                        <td data-label="Linha">${req.linha}</td>
+                        <td data-label="Prioridade">${req.prioridade}</td>
+                        <td data-label="Status"><span class="status-badge status-${req.status.toLowerCase()}">${req.status}</span></td>
+                        <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
+                        <td data-label="Ações">
+                            ${currentUserProfiles.includes('admin') ?
+                            `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
+                             <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>
+                             <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                        </td>
+                    `;
+                }
+            });
+        }
+
+
+        // --- CSV Import/Export ---
+        function exportarCSV(section) {
+            let dataToExport = [];
+            let filename = '';
+            let headers = [];
+
+            if (section === 'fabrica') {
+                dataToExport = requests.filter(req => req.status === 'Pendente').map(req => ({
+                    'Nº OP': req.op,
+                    'Código Produto': req.produto,
+                    'Linha': req.linha,
+                    'Prioridade': req.prioridade,
+                    'Status': req.status
+                }));
+                headers = ['Nº OP', 'Código Produto', 'Linha', 'Prioridade', 'Status'];
+                filename = 'solicitacoes_fabrica.csv';
+            } else if (section === 'admin') {
+                dataToExport = requests.map(req => ({
+                    'ID': req.id,
+                    'Nº OP': req.op,
+                    'Código Produto': req.produto,
+                    'Linha': req.linha,
+                    'Prioridade': req.prioridade,
+                    'Status': req.status,
+                    'Responsável': req.responsavel || ''
+                }));
+                headers = ['ID', 'Nº OP', 'Código Produto', 'Linha', 'Prioridade', 'Status', 'Responsável'];
+                filename = 'solicitacoes_admin.csv';
+            } else if (section === 'logistica') {
+                dataToExport = requests.map(req => ({
+                    'ID': req.id,
+                    'Nº OP': req.op,
+                    'Código Produto': req.produto,
+                    'Linha': req.linha,
+                    'Prioridade': req.prioridade,
+                    'Status': req.status,
+                    'Responsável': req.responsavel || ''
+                }));
+                headers = ['ID', 'Nº OP', 'Código Produto', 'Linha', 'Prioridade', 'Status', 'Responsável'];
+                filename = 'solicitacoes_logistica.csv';
+            } else if (section === 'logsAbastecimento') {
+                dataToExport = logs.map(log => ({
+                    'ID Solicitação': log.solicitacaoId,
+                    'Nº OP': log.op,
+                    'Produto': log.produto,
+                    'Linha': log.linha,
+                    'Usuário Responsável': log.usuarioResponsavel,
+                    'Data Abastecimento': log.dataAbastecimento
+                }));
+                headers = ['ID Solicitação', 'Nº OP', 'Produto', 'Linha', 'Usuário Responsável', 'Data Abastecimento'];
+                filename = 'logs_abastecimento.csv';
+            }
+
+
+            if (dataToExport.length === 0) {
+                showNotification('Nenhum dado para exportar.', 'info');
+                return;
+            }
+
+            let csv = headers.join(',') + '\n';
+            dataToExport.forEach(row => {
+                csv += headers.map(header => {
+                    let value = row[header];
+                    if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+                        value = `"${value.replace(/"/g, '""')}"`;
+                    }
+                    return value;
+                }).join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showNotification('Dados exportados com sucesso!', 'success');
+            }
+        }
+
+        function importarCSV(event, section) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(line => line.trim() !== ''); // Filter out empty lines
+                if (lines.length <= 1) {
+                    showNotification('O arquivo CSV está vazio ou contém apenas o cabeçalho.', 'warning');
+                    return;
+                }
+
+                const headers = lines[0].split(',').map(h => h.trim());
+                const importedData = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSVLine(lines[i]);
+                    if (values.length !== headers.length) {
+                         console.warn(`Skipping malformed row: ${lines[i]} (expected ${headers.length} columns, got ${values.length})`);
+                        showNotification(`Linha ${i + 1} do CSV ignorada: número de colunas incorreto.`, 'warning');
+                        continue;
+                    }
+                    const rowData = {};
+                    headers.forEach((header, index) => {
+                        rowData[header] = values[index];
+                    });
+                    importedData.push(rowData);
+                }
+
+                if (section === 'fabrica' || section === 'admin') {
+                    const newRequests = importedData.map(item => {
+                        const existingRequest = requests.find(req => req.op === item['Nº OP'] && req.produto === item['Código Produto']);
+                        if (existingRequest) {
+                            return {
+                                ...existingRequest,
+                                prioridade: item['Prioridade'] || existingRequest.prioridade,
+                                status: item['Status'] || existingRequest.status,
+                                linha: item['Linha'] || existingRequest.linha
+                            };
+                        } else {
+                            return {
+                                id: Date.now().toString() + Math.random().toString(36).substr(2, 9), // More robust ID
+                                op: item['Nº OP'],
+                                produto: item['Código Produto'],
+                                linha: item['Linha'],
+                                prioridade: item['Prioridade'] || 'Baixa',
+                                status: item['Status'] || 'Pendente',
+                                responsavel: null
+                            };
+                        }
+                    });
+                     // Merge new requests, prioritizing updates over new additions if IDs match
+                    newRequests.forEach(newReq => {
+                        const index = requests.findIndex(req => req.id === newReq.id || (req.op === newReq.op && req.produto === newReq.produto));
+                        if (index !== -1) {
+                            // Update existing request
+                            requests[index] = newReq;
+                        } else {
+                            // Add new request
+                            requests.push(newReq);
+                        }
+                    });
+
+                    saveRequests();
+                    renderFabricaTable();
+                    renderAdminTable();
+                    showNotification(`${importedData.length} solicitações importadas/atualizadas com sucesso!`, 'success');
+                } else if (section === 'logsAbastecimento') {
+                    // This case is unlikely for direct import, as logs are generated internally.
+                    // But if you wanted to manually import logs, you'd process them here.
+                    showNotification('Importação de logs diretamente via CSV não é comumente utilizada para este sistema.', 'warning');
+                    return;
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Clear the input so same file can be selected again
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let inQuote = false;
+            let currentField = '';
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    if (inQuote && line[i + 1] === '"') { // Escaped quote
+                        currentField += '"';
+                        i++;
+                    } else {
+                        inQuote = !inQuote;
+                    }
+                } else if (char === ',' && !inQuote) {
+                    result.push(currentField.trim());
+                    currentField = '';
+                } else {
+                    currentField += char;
+                }
+            }
+            result.push(currentField.trim());
+            return result;
+        }
+
+
+        // Inicialização: exibe a página de login por padrão
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('app-layout').style.display = 'none';
+        });
+
+    </script>
+</body>
+
+</html>
