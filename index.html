@@ -733,7 +733,7 @@
         }
 
         .logo-container {
-    margin-bottom: 30px;
+    margin-bottom: -50px;
     text-align: center;
 }
 
@@ -743,16 +743,60 @@
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
+ /* Responsividade extra para telas muito pequenas */
+    @media (max-width: 480px) {
+        .login-container {
+            padding: 20px;
+            max-width: 95vw;
+        }
+        .modal-content {
+            padding: 10px;
+            width: 99vw;
+        }
+        header h1 {
+            font-size: 18px;
+        }
+        .content-wrapper {
+            padding: 8px;
+        }
+        .btn {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+        aside {
+            width: 100vw;
+            padding: 15px 5px;
+        }
+    }
+
+    /* Melhorar tabelas em telas pequenas */
+    @media (max-width: 768px) {
+        .content-wrapper table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .content-wrapper th, .content-wrapper td {
+            min-width: 120px;
+        }
+        aside {
+            width: 60vw;
+            min-width: 180px;
+            padding: 15px 8px;
+        }
+    }
+
     </style>
 </head>
 
 <body>
   <div id="login-page">
-    <div class="logo-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Midea.svg/1200px-Midea.svg.png" alt="Logo Midea">
-    </div>
-    <div class="login-container">
-        <h2>Bem-vindo ao Sistema ERP</h2>
+      <div class="login-container">
+          <div class="logo-container">
+              <img src="https://sdmntprwestus.oaiusercontent.com/files/00000000-a1d8-6230-931e-f0dfab27bc2a/raw?se=2025-07-30T15%3A26%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=d934694f-2dff-5dcf-84ad-db4570d0c984&skoid=f71d6506-3cac-498e-b62a-67f9228033a9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-29T18%3A53%3A05Z&ske=2025-07-30T18%3A53%3A05Z&sks=b&skv=2024-08-04&sig=OAMyFBDjFtfWtbMmIB9qc22qWD7GOOCZr8UfI5KvWNY%3D" alt="Logo SysBrucken">
+            </div>
+            
         <form id="login-form">
             <div class="input-group">
                 <label for="username">Usuário:</label>
