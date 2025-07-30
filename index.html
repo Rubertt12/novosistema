@@ -392,7 +392,7 @@
         }
 
         .btn-status:hover {
-            background-color: #218838;
+            background-color: #3f4240;
             transform: translateY(-1px);
         }
 
@@ -1296,7 +1296,7 @@
                     <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
                     <td data-label="Ações">
                         ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
-                        `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                        `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
                     </td>
                 `;
             });
@@ -1319,7 +1319,7 @@
                         ${currentUserProfiles.includes('admin') ?
                         `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
                          <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>
-                         <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                         <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
                     </td>
                 `;
             });
@@ -1666,7 +1666,7 @@
                         <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
                         <td data-label="Ações">
                             ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
-                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
                         </td>
                     `;
                 } else if (section === 'admin') {
@@ -1681,7 +1681,7 @@
                             ${currentUserProfiles.includes('admin') ?
                             `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
                              <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>
-                             <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                             <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
                         </td>
                     `;
                 }
