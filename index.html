@@ -21,7 +21,7 @@
 
         /* --- Layout do Login --- */
         /* --- Layout do Login --- */
-        #login-page {
+           #login-page {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -30,6 +30,7 @@
             padding: 20px;
             box-sizing: border-box;
             overflow: hidden; /* Evita barras de rolagem desnecessárias */
+            position: relative; /* FUNDAMENTAL para posicionar o copyright text */
         }
         .login-container {
             background-color: rgba(255, 255, 255, 0.95); /* Fundo branco semi-transparente */
@@ -794,20 +795,15 @@
             }
         }
 
-       /* Estilo para o Copyright no canto inferior esquerdo da página */
-        .copyright-text {
-            position: fixed; /* Fixa na viewport */
-            bottom: 15px;    /* 15px do fundo */
-            left: 15px;      /* 15px da esquerda */
-            font-size: 0.85em; /* Tamanho da fonte menor */
-            color: #ccc; /* Cor cinza mais clara para se destacar do fundo escuro do login, mas ser discreta no app */
-            text-align: left; /* Alinhamento à esquerda */
-            z-index: 1000;   /* Garante que fique acima de outros elementos se houver sobreposição */
-            background-color: rgba(0, 0, 0, 0.3); /* Um fundo levemente transparente para contraste */
-            padding: 8px 12px; /* Um pouco de padding */
-            border-radius: 5px; /* Bordas arredondadas */
-            backdrop-filter: blur(2px); /* Efeito de blur no fundo (moderno) */
-            white-space: nowrap; /* Evita quebra de linha em telas muito estreitas */
+          .copyright-text {
+            position: absolute; /* Posição absoluta em relação ao #login-page */
+            bottom: 15px;       /* 15px do fundo do #login-page */
+            left: 15px;         /* 15px da esquerda do #login-page */
+            font-size: 0.8em;   /* Tamanho da fonte menor */
+            color: rgba(255, 255, 255, 0.7); /* Cor branca transparente para contraste com o gradiente */
+            text-align: left;
+            z-index: 1000;      /* Garante que fique acima de outros elementos */
+            /* Remova quaisquer propriedades de background-color, padding, border-radius, backdrop-filter daqui se tiverem sido adicionadas antes */
         }
 
         /* Ajuste para telas muito pequenas, caso haja conflito */
@@ -815,8 +811,7 @@
             .copyright-text {
                 bottom: 10px;
                 left: 10px;
-                font-size: 0.75em;
-                padding: 6px 10px;
+                font-size: 0.7em;
             }
         }
 
@@ -871,7 +866,7 @@
 
     <div id="notification-container"></div>
 
-    <div id="login-page">
+   <div id="login-page">
         <div class="login-container">
             <h2>Login</h2>
             <form id="login-form">
@@ -885,9 +880,12 @@
                 </div>
                 <button type="submit" class="login-button">Entrar</button>
                 <p id="login-error">Usuário ou senha inválidos.</p>
-             </form>
-             <p class="forgot-password-link">
+            </form>
+            <p class="forgot-password-link">
                 <a href="#" onclick="abrirModalEsqueciSenha(event)">Esqueci minha senha?</a>
+            </p>
+            <p class="copyright-text">
+                © 2025 Desenvolvido por Rúbertt. Todos os direitos reservados.
             </p>
         </div>
     </div>
@@ -2274,8 +2272,6 @@
         });
     </script>
 
-      <p class="copyright-text">
-        © 2025 Desenvolvido por Rúbertt. Todos os direitos reservados.
-    </p>
+     
 </body>
 </html>
