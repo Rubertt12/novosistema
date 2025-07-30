@@ -20,14 +20,37 @@
         }
 
         /* --- Layout do Login --- */
+        /* --- Layout do Login --- */
         #login-page {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(to right, #e0e0e0, #c0c0c0);
-            padding: 20px; /* Adiciona padding para telas pequenas */
-            box-sizing: border-box; /* Inclui padding na largura total */
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* Gradiente roxo/azul */
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden; /* Evita barras de rolagem desnecessárias */
+        }
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95); /* Fundo branco semi-transparente */
+            padding: 50px 40px; /* Mais padding para um visual espaçoso */
+            border-radius: 15px; /* Bordas mais arredondadas */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); /* Sombra mais forte */
+            width: 420px; /* Ligeiramente mais largo */
+            max-width: 95%; /* Garante responsividade */
+            text-align: center;
+            animation: fadeInScale 0.6s ease-out; /* Animação de entrada */
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         .login-container {
             background-color: white;
@@ -38,55 +61,69 @@
             max-width: 100%; /* Garante que não exceda a largura da tela */
             text-align: center;
         }
-        .login-container h2 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2em;
+       .login-container h2 {
+            color: #333; /* Cor mais escura para o texto */
+            margin-bottom: 35px; /* Mais espaço abaixo do título */
+            font-size: 2.4em; /* Título maior */
+            font-weight: 700; /* Mais negrito */
+            letter-spacing: -0.5px;
         }
-        .input-group {
-            margin-bottom: 20px;
+          .input-group {
+            margin-bottom: 25px; /* Mais espaço entre os grupos de input */
             text-align: left;
+            position: relative; /* Para possíveis ícones ou efeitos */
         }
         .input-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px; /* Mais espaço entre label e input */
             color: #555;
-            font-weight: bold;
-            font-size: 0.95em;
-        }
-        .input-group input {
-            width: calc(100% - 24px); /* Aumenta padding */
-            padding: 14px 12px; /* Aumenta padding */
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            font-weight: 600; /* Mais negrito */
             font-size: 1em;
-            transition: border-color 0.3s ease;
-            box-sizing: border-box; /* Garante que padding não adicione à largura */
+        }
+         .input-group input {
+            width: calc(100% - 28px); /* Ajuste de largura para padding */
+            padding: 15px 14px; /* Padding generoso */
+            border: 1px solid #c9d2db; /* Borda mais suave */
+            border-radius: 8px; /* Bordas arredondadas nos inputs */
+            font-size: 1.05em; /* Fonte ligeiramente maior */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            background-color: #f8faff; /* Fundo levemente azulado */
         }
         .input-group input:focus {
-            border-color: #007bff;
+            border-color: #2575fc; /* Borda azul no foco */
             outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            box-shadow: 0 0 0 4px rgba(37, 117, 252, 0.2); /* Sombra suave no foco */
+            background-color: white; /* Fundo branco limpo no foco */
         }
-        .login-button {
-            background-color: #007bff;
+       .login-button {
+            background: linear-gradient(to right, #2575fc, #6a11cb); /* Gradiente no botão */
             color: white;
-            padding: 16px 25px; /* Aumenta padding */
+            padding: 18px 25px; /* Botão maior */
             border: none;
-            border-radius: 6px;
+            border-radius: 8px; /* Bordas arredondadas no botão */
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1.2em; /* Fonte maior */
             width: 100%;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra no botão */
         }
         .login-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+            background: linear-gradient(to right, #1a60e0, #540da0); /* Escurece o gradiente no hover */
+            transform: translateY(-3px); /* Efeito de "levantar" */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra mais pronunciada no hover */
+        }
+        .login-button:active {
+            transform: translateY(0); /* Volta ao normal no clique */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         }
         #login-error {
-            color: #dc3545;
-            margin-top: 15px;
-            font-size: 0.9em;
+            color: #e74c3c; /* Vermelho mais vibrante */
+            margin-top: 20px; /* Mais espaço acima do erro */
+            font-size: 0.95em;
+            font-weight: 600;
             display: none;
         }
 
@@ -756,6 +793,78 @@
                 display: inline; /* Mostra novamente em desktop */
             }
         }
+
+       /* Estilo para o Copyright no canto inferior esquerdo da página */
+        .copyright-text {
+            position: fixed; /* Fixa na viewport */
+            bottom: 15px;    /* 15px do fundo */
+            left: 15px;      /* 15px da esquerda */
+            font-size: 0.85em; /* Tamanho da fonte menor */
+            color: #ccc; /* Cor cinza mais clara para se destacar do fundo escuro do login, mas ser discreta no app */
+            text-align: left; /* Alinhamento à esquerda */
+            z-index: 1000;   /* Garante que fique acima de outros elementos se houver sobreposição */
+            background-color: rgba(0, 0, 0, 0.3); /* Um fundo levemente transparente para contraste */
+            padding: 8px 12px; /* Um pouco de padding */
+            border-radius: 5px; /* Bordas arredondadas */
+            backdrop-filter: blur(2px); /* Efeito de blur no fundo (moderno) */
+            white-space: nowrap; /* Evita quebra de linha em telas muito estreitas */
+        }
+
+        /* Ajuste para telas muito pequenas, caso haja conflito */
+        @media (max-width: 480px) {
+            .copyright-text {
+                bottom: 10px;
+                left: 10px;
+                font-size: 0.75em;
+                padding: 6px 10px;
+            }
+        }
+
+
+        /* Estilo para o link "Esqueci minha senha?" */
+        .forgot-password-link {
+            margin-top: 20px; /* Espaço acima */
+            font-size: 0.95em;
+        }
+        .forgot-password-link a {
+            color: #2575fc; /* Cor azul para o link */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .forgot-password-link a:hover {
+            color: #1a60e0; /* Escurece no hover */
+            text-decoration: underline;
+        }
+
+        /* Estilos específicos para o Modal de Esqueci a Senha - reaproveitam estilos .modal, .modal-content, etc. */
+        #esqueciSenhaModal .modal-content h2 {
+            color: #333; /* Mantém o mesmo estilo dos títulos de modal */
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+        #esqueciSenhaModal .input-group label {
+            color: #555;
+            font-weight: 600;
+        }
+        #esqueciSenhaModal .input-group input[type="email"] {
+            width: calc(100% - 28px);
+            padding: 15px 14px;
+            border: 1px solid #c9d2db;
+            border-radius: 8px;
+            font-size: 1.05em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            background-color: #f8faff;
+        }
+        #esqueciSenhaModal .input-group input[type="email"]:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 117, 252, 0.2);
+            background-color: white;
+        }
+        #esqueciSenhaModal .button-group {
+            margin-top: 30px; /* Mais espaço antes dos botões */
+        }
     </style>
 </head>
 <body>
@@ -776,7 +885,10 @@
                 </div>
                 <button type="submit" class="login-button">Entrar</button>
                 <p id="login-error">Usuário ou senha inválidos.</p>
-            </form>
+             </form>
+             <p class="forgot-password-link">
+                <a href="#" onclick="abrirModalEsqueciSenha(event)">Esqueci minha senha?</a>
+            </p>
         </div>
     </div>
 
@@ -1017,9 +1129,16 @@
                     <label for="produto">Código Produto:</label>
                     <input type="text" id="produto" required>
                 </div>
-                <div class="input-group">
+                 <div class="input-group">
                     <label for="linha">Linha:</label>
-                    <input type="text" id="linha" required>
+                    <select id="linha" required>
+                        <option value="">Selecione uma linha</option>
+                        <option value="Chiller">Chiller</option>
+                        <option value="Aletado">Aletado</option>
+                        <option value="Expedição">Expedição</option>
+                        <option value="Manutenção">Manutenção</option>
+                       
+                        </select>
                 </div>
                 <div class="input-group">
                     <label for="prioridade">Prioridade:</label>
@@ -1063,6 +1182,24 @@
                 <div class="button-group">
                     <button type="button" class="btn btn-cancel" onclick="fecharModalUsuario()">Cancelar</button>
                     <button type="submit" class="btn btn-submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="esqueciSenhaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="fecharModalEsqueciSenha()">&times;</span>
+            <h2 id="esqueciSenhaModalTitle">Esqueci minha senha</h2>
+            <form id="esqueciSenhaForm">
+                <div class="input-group">
+                    <label for="esqueciSenhaEmail">E-mail:</label>
+                    <input type="email" id="esqueciSenhaEmail" required placeholder="Digite seu e-mail de cadastro">
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-cancel" onclick="fecharModalEsqueciSenha()">Cancelar</button>
+                    <button type="submit" class="btn btn-submit">Enviar instruções</button>
                 </div>
             </form>
         </div>
@@ -1410,7 +1547,7 @@
                     solicitacaoIdInput.value = request.id;
                     opInput.value = request.op;
                     produtoInput.value = request.produto;
-                    linhaInput.value = request.linha;
+                    linhaSelect.value = request.linha;
                     prioridadeSelect.value = request.prioridade;
                 } else {
                     showNotification('Solicitação não encontrada para edição.', 'danger');
@@ -2077,6 +2214,68 @@
                  document.getElementById('app-layout').style.display = 'none';
             }
         });
+
+
+
+        const esqueciSenhaModal = document.getElementById('esqueciSenhaModal');
+        const esqueciSenhaForm = document.getElementById('esqueciSenhaForm');
+        const esqueciSenhaEmailInput = document.getElementById('esqueciSenhaEmail');
+
+
+        function abrirModalEsqueciSenha(event) {
+            if (event) event.preventDefault(); // Previne o comportamento padrão do link se chamado por clique
+            esqueciSenhaModal.style.display = 'flex';
+            esqueciSenhaForm.reset(); // Limpa o formulário ao abrir
+        }
+
+        function fecharModalEsqueciSenha() {
+            esqueciSenhaModal.style.display = 'none';
+        }
+
+
+
+        esqueciSenhaForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = esqueciSenhaEmailInput.value.trim();
+
+            if (!email) {
+                showNotification('Por favor, digite seu e-mail.', 'warning');
+                return;
+            }
+
+            // Simulação de envio de e-mail de recuperação
+            showNotification(`As instruções de recuperação foram enviadas para ${email}.`, 'success');
+            console.log(`Simulando envio de e-mail de recuperação para: ${email}`);
+
+            // Aqui você integraria com um backend para realmente enviar o e-mail.
+            // Exemplo (pseudocódigo):
+            /*
+            fetch('/api/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('As instruções foram enviadas para seu e-mail.', 'success');
+                    fecharModalEsqueciSenha();
+                } else {
+                    showNotification(data.message || 'Erro ao enviar instruções.', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showNotification('Erro na comunicação com o servidor.', 'danger');
+            });
+            */
+
+            fecharModalEsqueciSenha();
+        });
     </script>
+
+      <p class="copyright-text">
+        © 2025 Desenvolvido por Rúbertt. Todos os direitos reservados.
+    </p>
 </body>
 </html>
