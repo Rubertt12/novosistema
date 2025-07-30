@@ -392,7 +392,7 @@
         }
 
         .btn-status:hover {
-            background-color: #3f4240;
+            background-color: #218838;
             transform: translateY(-1px);
         }
 
@@ -815,7 +815,7 @@
   <div id="login-page">
       <div class="login-container">
           <div class="logo-container">
-              <img src="https://sdmntprwestus.oaiusercontent.com/files/00000000-a1d8-6230-931e-f0dfab27bc2a/raw?se=2025-07-30T15%3A26%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=d934694f-2dff-5dcf-84ad-db4570d0c984&skoid=f71d6506-3cac-498e-b62a-67f9228033a9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-29T18%3A53%3A05Z&ske=2025-07-30T18%3A53%3A05Z&sks=b&skv=2024-08-04&sig=OAMyFBDjFtfWtbMmIB9qc22qWD7GOOCZr8UfI5KvWNY%3D" alt="Logo SysBrucken">
+              <img src="/sysdark.png" alt="Logo SysBrucken">
             </div>
             
         <form id="login-form">
@@ -839,7 +839,9 @@
 
     <div id="app-layout">
         <aside>
-            <img src="https://sdmntpreastus2.oaiusercontent.com/files/00000000-db70-61f6-9aca-17cbc9985b64/raw?se=2025-07-30T15%3A41%3A10Z&sp=r&sv=2024-08-04&sr=b&scid=9de1f7b0-9e2d-5dad-956f-493df7a0f7cd&skoid=f71d6506-3cac-498e-b62a-67f9228033a9&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-07-29T18%3A53%3A04Z&ske=2025-07-30T18%3A53%3A04Z&sks=b&skv=2024-08-04&sig=8WW6myqVQrPJ/lqVxK5jo2XTHUiGHwdDjgac2QfFp/o%3D" alt="Logo SysBrucken">
+             <div class="logo-container">
+              <img src="/sysdark.png" alt="Logo SysBrucken">
+            </div>
             <h2>TableTrack</h2>
             <ul id="main-menu">
             </ul>
@@ -1296,7 +1298,7 @@
                     <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
                     <td data-label="Ações">
                         ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
-                        `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
+                        `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
                     </td>
                 `;
             });
@@ -1319,7 +1321,7 @@
                         ${currentUserProfiles.includes('admin') ?
                         `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
                          <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>
-                         <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
+                         <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
                     </td>
                 `;
             });
@@ -1666,7 +1668,7 @@
                         <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
                         <td data-label="Ações">
                             ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
-                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
+                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
                         </td>
                     `;
                 } else if (section === 'admin') {
@@ -1681,7 +1683,7 @@
                             ${currentUserProfiles.includes('admin') ?
                             `<button class="btn btn-edit" onclick="editarSolicitacao('${req.id}')"><i class="fas fa-edit"></i> Editar</button>
                              <button class="btn btn-remove" onclick="removerSolicitacao('${req.id}')"><i class="fas fa-trash"></i> Remover</button>
-                             <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
+                             <button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
                         </td>
                     `;
                 }
