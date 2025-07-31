@@ -1470,7 +1470,7 @@
                     <td data-label="Hora Solicitação">${req.horaSolicitacao || 'N/A'}</td> <td data-label="Responsável">${req.responsavel || 'N/A'}</td>
                     <td data-label="Ações">
                         ${currentUserProfiles.includes('logistica') || currentUserProfiles.includes('admin') ?
-                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecido' : 'Reverter'}</button>` : ''}
+                            `<button class="btn btn-status" onclick="mudarStatusSolicitacao('${req.id}', '${req.status}')"><i class="fas ${req.status === 'Pendente' ? 'fa-check' : 'fa-undo'}"></i> ${req.status === 'Pendente' ? 'Abastecer' : 'Reverter'}</button>` : ''}
                     </td>
                 `;
             });
